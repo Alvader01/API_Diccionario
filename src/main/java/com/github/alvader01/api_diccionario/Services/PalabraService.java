@@ -1,4 +1,4 @@
-package com.github.alvader01.api_diccionario.Servicces;
+package com.github.alvader01.api_diccionario.Services;
 
 import com.github.alvader01.api_diccionario.Entities.Palabra;
 import com.github.alvader01.api_diccionario.Exceptions.CategoriaNotFoundException;

@@ -2,8 +2,8 @@ package com.github.alvader01.api_diccionario.Controllers;
 
 import com.github.alvader01.api_diccionario.Entities.Definicion;
 import com.github.alvader01.api_diccionario.Exceptions.RecordNotFoundException;
-import com.github.alvader01.api_diccionario.Servicces.DefinicionService;
-import com.github.alvader01.api_diccionario.Servicces.PalabraService;
+import com.github.alvader01.api_diccionario.Services.DefinicionService;
+import com.github.alvader01.api_diccionario.Services.PalabraService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;

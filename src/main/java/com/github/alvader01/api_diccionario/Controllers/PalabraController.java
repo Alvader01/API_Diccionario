@@ -4,7 +4,7 @@ import com.github.alvader01.api_diccionario.Entities.Palabra;
 import com.github.alvader01.api_diccionario.Exceptions.CategoriaNotFoundException;
 import com.github.alvader01.api_diccionario.Exceptions.InicialNotFoundException;
 import com.github.alvader01.api_diccionario.Exceptions.RecordNotFoundException;
-import com.github.alvader01.api_diccionario.Servicces.PalabraService;
+import com.github.alvader01.api_diccionario.Services.PalabraService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
