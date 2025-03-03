@@ -1,17 +1,16 @@
 package com.github.alvader01.api_diccionario.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-@Getter
-@Setter
+
 @Entity
 @Table(name = "definicion", schema = "diccionariodb")
 public class Definicion {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -31,6 +30,38 @@ public class Definicion {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "palabra_id", nullable = false)
+    @JsonBackReference  // Evita la recursión en el lado de Definicion
     private Palabra palabra;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public Palabra getPalabra() {
+        return palabra;
+    }
+
+    public void setPalabra(Palabra palabra) {
+        this.palabra = palabra;
+    }
+
+    public String getEjemplo() {
+        return ejemplo;
+    }
+
+    public void setEjemplo(String ejemplo) {
+        this.ejemplo = ejemplo;
+    }
 }

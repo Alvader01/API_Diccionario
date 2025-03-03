@@ -11,6 +11,10 @@ public class RecordNotFoundException extends RuntimeException {
     private String exceptionDetail;
     private Object fieldValue;
 
+    public RecordNotFoundException(String exceptionDetail) {
+        super(exceptionDetail);
+    }
+
     public RecordNotFoundException(String exceptionDetail, Object fieldValue) {
         super(exceptionDetail+" - "+fieldValue);
         this.exceptionDetail = exceptionDetail;

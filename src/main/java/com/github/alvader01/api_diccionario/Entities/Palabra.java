@@ -1,19 +1,20 @@
 package com.github.alvader01.api_diccionario.Entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-@Getter
-@Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "palabra", schema = "diccionariodb")
 public class Palabra {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -26,10 +27,42 @@ public class Palabra {
 
     @Size(max = 50)
     @NotNull
-    @Column(name = "categoriaGramatical", nullable = false, length = 50)
+    @Column(name = "categoria_gramatical", nullable = false, length = 50)
     private String categoriaGramatical;
 
     @OneToMany(mappedBy = "palabra")
+    @JsonManagedReference  // Evita la recursión en el lado de Palabra
     private Set<Definicion> definicions = new LinkedHashSet<>();
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getTermino() {
+        return termino;
+    }
+
+    public void setTermino(String termino) {
+        this.termino = termino;
+    }
+
+    public String getCategoriaGramatical() {
+        return categoriaGramatical;
+    }
+
+    public void setCategoriaGramatical(String categoriaGramatical) {
+        this.categoriaGramatical = categoriaGramatical;
+    }
+
+    public Set<Definicion> getDefinicions() {
+        return definicions;
+    }
+
+    public void setDefinicions(Set<Definicion> definicions) {
+        this.definicions = definicions;
+    }
 }
