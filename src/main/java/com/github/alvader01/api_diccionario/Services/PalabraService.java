@@ -21,7 +21,7 @@ public class PalabraService {
     /*Este metodo obtiene todas las palabras almacenadas en la base de datos.
     Utiliza el repositorio `palabraRepository` para realizar una búsqueda de todas las palabras.*/
     public List<Palabra> getAllPalabras() {
-        return palabraRepository.findAll();
+        return palabraRepository.findAllWithoutDefinitions();
     }
 
     /* Este metodo busca una palabra por su ID.
@@ -50,12 +50,6 @@ public class PalabraService {
             // Si ocurre un error de integridad de datos, lanza una excepción con un mensaje de error.
             throw new IllegalArgumentException("Error al guardar la palabra: " + e.getMessage());
         }
-    }
-
-    /*Este metodo crea una palabra junto con definiciones asociadas (sin verificar si la palabra ya existe).
-     Se guarda la palabra directamente en el repositorio.*/
-    public Palabra createPalabraConDefiniciones(Palabra palabra) {
-        return palabraRepository.save(palabra);
     }
 
     /*Este metodo actualiza los detalles de una palabra existente.

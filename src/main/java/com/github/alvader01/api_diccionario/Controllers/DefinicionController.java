@@ -30,15 +30,14 @@ public class DefinicionController {
             summary = "Obtener definiciones de una palabra",
             description = "Este método obtiene todas las definiciones asociadas a una palabra, dada su ID."
     )
-    public ResponseEntity<?> getDefiniciones(
+    public ResponseEntity<List<Definicion>> getDefiniciones(
             @Parameter(description = "ID de la palabra para obtener sus definiciones", required = true)
             @PathVariable Long palabraId) {
 
         List<Definicion> list = definicionService.getDefinicionesByPalabraId(palabraId);
 
         if (list.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Collections.singletonMap("error", "No se encontraron definiciones para la palabra con ID: " + palabraId));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
         }
 
         return new ResponseEntity<>(list, HttpStatus.OK);
@@ -50,7 +49,7 @@ public class DefinicionController {
             summary = "Agregar definición para una palabra",
             description = "Este método agrega una nueva definición para la palabra con el ID proporcionado."
     )
-    public ResponseEntity<?> addDefinicion(
+    public ResponseEntity<Definicion> addDefinicion(
             @Parameter(description = "ID de la palabra para agregar la definición", required = true)
             @PathVariable Long palabraId,
             @Parameter(description = "Definición a agregar", required = true)
@@ -60,8 +59,7 @@ public class DefinicionController {
             Definicion createdDefinicion = definicionService.addDefinicion(palabraId, definicion);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdDefinicion);
         } catch (RecordNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Collections.singletonMap("message", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
@@ -71,16 +69,15 @@ public class DefinicionController {
             summary = "Eliminar definición",
             description = "Este método elimina la definición correspondiente al ID proporcionado."
     )
-    public ResponseEntity<?> deleteDefinicion(
+    public ResponseEntity<String> deleteDefinicion(
             @Parameter(description = "ID de la definición a eliminar", required = true)
             @PathVariable Long id) {
 
         try {
             definicionService.deleteDefinicion(id);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(Collections.singletonMap("message", "Definición eliminada con éxito."));
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Definición eliminada con éxito.");
         } catch (RecordNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Collections.singletonMap("message", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró la definición con ID: " + id);
         }
     }
 
@@ -90,7 +87,7 @@ public class DefinicionController {
             summary = "Crear palabra con definiciones",
             description = "Este método crea una nueva palabra junto con las definiciones proporcionadas."
     )
-    public ResponseEntity<?> createPalabraConDefiniciones(
+    public ResponseEntity<Definicion> createPalabraConDefiniciones(
             @Parameter(description = "Definición para la palabra a crear", required = true)
             @RequestBody Definicion definicion) {
 
@@ -98,8 +95,7 @@ public class DefinicionController {
             Definicion createdDefinicion = definicionService.createPalabraConDefiniciones(definicion);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdDefinicion);
         } catch (RecordNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Collections.singletonMap("message", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 }

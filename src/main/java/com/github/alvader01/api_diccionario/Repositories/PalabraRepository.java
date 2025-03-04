@@ -10,6 +10,11 @@ import java.util.Optional;
 
 @Repository
 public interface PalabraRepository extends JpaRepository<Palabra, Long> {
+
+    @Query("SELECT new Palabra(p.id, p.termino, p.categoriaGramatical) FROM Palabra p")
+    List<Palabra> findAllWithoutDefinitions();
+
+
     // Consulta personalizada para obtener todas las palabras que pertenecen a una categoría gramatical específica.
     @Query("SELECT p FROM Palabra p WHERE p.categoriaGramatical = :categoria")
     List<Palabra> findByCategoriaGramatical(String categoria);

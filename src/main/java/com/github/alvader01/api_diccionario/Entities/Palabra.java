@@ -1,5 +1,6 @@
 package com.github.alvader01.api_diccionario.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -30,9 +31,20 @@ public class Palabra {
     @Column(name = "categoria_gramatical", nullable = false, length = 50)
     private String categoriaGramatical;
 
-    @OneToMany(mappedBy = "palabra")
+    @OneToMany(mappedBy = "palabra",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference  // Evita la recursión en el lado de Palabra
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Set<Definicion> definicions = new LinkedHashSet<>();
+
+    public Palabra(Integer id, String termino, String categoriaGramatical) {
+        this.id = id;
+        this.termino = termino;
+        this.categoriaGramatical = categoriaGramatical;
+    }
+
+    public Palabra() {
+
+    }
 
     public Integer getId() {
         return id;

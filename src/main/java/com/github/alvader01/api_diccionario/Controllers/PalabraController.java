@@ -27,24 +27,24 @@ public class PalabraController {
     @GetMapping
     @Operation(
             summary = "Obtener todas las palabras",
-            description = "Este método devuelve todas las palabras almacenadas en el sistema."
+            description = "Este método devuelve todas las palabras almacenadas en el sistema sin sus definiciones."
     )
     public ResponseEntity<List<Palabra>> findAll() {
         List<Palabra> list = palabraService.getAllPalabras();
-        return new ResponseEntity<>(list, new HttpHeaders(), HttpStatus.OK);
+        return ResponseEntity.ok(list);
     }
 
     @CrossOrigin
     @GetMapping("/{id}")
     @Operation(
             summary = "Buscar palabra por ID",
-            description = "Este método busca una palabra por su ID."
+            description = "Este método busca una palabra por su ID, incluyendo sus definiciones."
     )
     public ResponseEntity<Palabra> getPalabraById(
             @Parameter(description = "ID de la palabra a buscar", required = true)
             @PathVariable Long id) throws RecordNotFoundException {
         Palabra palabra = palabraService.getPalabraById(id);
-        return new ResponseEntity<>(palabra, new HttpHeaders(), HttpStatus.OK);
+        return ResponseEntity.ok(palabra);
     }
 
     @CrossOrigin
@@ -53,14 +53,14 @@ public class PalabraController {
             summary = "Crear una nueva palabra",
             description = "Este método crea una nueva palabra."
     )
-    public ResponseEntity<?> createPalabra(
+    public ResponseEntity<Palabra> createPalabra(
             @Parameter(description = "Palabra a crear", required = true)
             @RequestBody Palabra palabra) {
         try {
             Palabra nuevaPalabra = palabraService.createPalabra(palabra);
             return ResponseEntity.status(HttpStatus.CREATED).body(nuevaPalabra);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
@@ -70,16 +70,16 @@ public class PalabraController {
             summary = "Actualizar palabra",
             description = "Este método actualiza una palabra existente."
     )
-    public ResponseEntity<?> updatePalabra(
+    public ResponseEntity<Palabra> updatePalabra(
             @Parameter(description = "Palabra a actualizar", required = true)
             @RequestBody Palabra palabra) {
         try {
             Palabra updatedPalabra = palabraService.updatePalabra(palabra);
             return ResponseEntity.status(HttpStatus.OK).body(updatedPalabra);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (RecordNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
@@ -89,14 +89,14 @@ public class PalabraController {
             summary = "Eliminar palabra",
             description = "Este método elimina una palabra mediante su ID."
     )
-    public ResponseEntity<?> deletePalabra(
+    public ResponseEntity<String> deletePalabra(
             @Parameter(description = "ID de la palabra a eliminar", required = true)
             @PathVariable Long id) {
         try {
             palabraService.deletePalabra(id);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(Collections.singletonMap("message", "La palabra con id " + id + " ha sido eliminada."));
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("La palabra con id " + id + " ha sido eliminada.");
         } catch (RecordNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", "No existe Palabra para el id: " + id));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe Palabra para el id: " + id);
         }
     }
 
@@ -106,7 +106,7 @@ public class PalabraController {
             summary = "Buscar palabras por categoría",
             description = "Este método busca palabras por su categoría gramatical."
     )
-    public ResponseEntity<?> getPalabrasByCategoria(
+    public ResponseEntity<List<Palabra>> getPalabrasByCategoria(
             @Parameter(description = "Categoría gramatical de las palabras", required = true)
             @PathVariable String categoria) {
         try {
@@ -116,8 +116,7 @@ public class PalabraController {
             }
             return new ResponseEntity<>(palabras, new HttpHeaders(), HttpStatus.OK);
         } catch (CategoriaNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", e.getMessage()));
-        }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());}
     }
 
     @CrossOrigin
@@ -126,14 +125,14 @@ public class PalabraController {
             summary = "Buscar palabras por inicial",
             description = "Este método busca palabras que comienzan con una letra inicial proporcionada."
     )
-    public ResponseEntity<?> getPalabrasByInicial(
+    public ResponseEntity<List<Palabra>> getPalabrasByInicial(
             @Parameter(description = "Letra inicial de las palabras", required = true)
             @PathVariable String letra) {
         try {
             List<Palabra> palabras = palabraService.getPalabrasByInicial(letra);
             return new ResponseEntity<>(palabras, new HttpHeaders(), HttpStatus.OK);
         } catch (InicialNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
         }
     }
 }
